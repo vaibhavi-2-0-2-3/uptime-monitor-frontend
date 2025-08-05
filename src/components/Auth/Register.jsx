@@ -16,7 +16,7 @@ const Register = () => {
       await axios.post("/auth/register", form);
       navigate("/login");
     } catch (err) {
-      alert("Registration failed");
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
