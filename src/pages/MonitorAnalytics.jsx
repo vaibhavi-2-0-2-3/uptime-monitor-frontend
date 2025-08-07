@@ -33,25 +33,26 @@ const MonitorAnalytics = ({ monitorId, token }) => {
   }, [monitorId, range, token]);
 
   return (
-    <div className="mt-2 p-2 bg-gray-50 rounded border border-gray-100">
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-semibold text-gray-700">Analytics</span>
+    <div className="chart-container">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm font-semibold text-text-primary">Detailed Analytics</span>
         <select
           value={range}
           onChange={e => setRange(e.target.value)}
-          className="text-xs border rounded px-1 py-0.5"
+          className="input-dark text-sm"
         >
           <option value="24h">Last 24h</option>
           <option value="7d">Last 7d</option>
         </select>
       </div>
+
       {loading ? (
-        <div className="text-xs text-gray-400">Loading...</div>
+        <div className="text-sm text-text-muted text-center py-8">Loading analytics...</div>
       ) : error ? (
-        <div className="text-xs text-red-400">{error}</div>
+        <div className="text-sm text-accent-red text-center py-8">{error}</div>
       ) : (
         <>
-          <ResponsiveContainer width="100%" height={40}>
+          <ResponsiveContainer width="100%" height={60}>
             <LineChart data={data.map(l => ({
               ...l,
               up: l.status === "UP" ? 1 : 0,
@@ -59,14 +60,33 @@ const MonitorAnalytics = ({ monitorId, token }) => {
             }))} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
               <XAxis dataKey="time" hide />
               <YAxis domain={[0, 1]} hide />
-              <Tooltip formatter={(v, n) => n === "up" ? (v ? "UP" : "DOWN") : v} labelFormatter={() => ""} />
+              <Tooltip
+                formatter={(v, n) => n === "up" ? (v ? "UP" : "DOWN") : v}
+                labelFormatter={() => ""}
+                contentStyle={{
+                  backgroundColor: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '8px',
+                  color: 'var(--text-primary)'
+                }}
+              />
               <Line type="monotone" dataKey="up" stroke="#10b981" dot={false} strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
-          <div className="flex flex-wrap gap-2 text-xs mt-1">
-            <span>Uptime: <span className="font-semibold">{uptime}%</span></span>
-            <span>Downtimes: <span className="font-semibold">{downtime}</span></span>
-            <span>Avg resp: <span className="font-semibold">{avgResponse}ms</span></span>
+
+          <div className="grid grid-cols-3 gap-4 mt-4 text-center">
+            <div>
+              <div className="text-sm text-text-muted">Uptime</div>
+              <div className="text-lg font-semibold text-accent-green">{uptime}%</div>
+            </div>
+            <div>
+              <div className="text-sm text-text-muted">Downtimes</div>
+              <div className="text-lg font-semibold text-accent-red">{downtime}</div>
+            </div>
+            <div>
+              <div className="text-sm text-text-muted">Avg Response</div>
+              <div className="text-lg font-semibold text-text-primary">{avgResponse}ms</div>
+            </div>
           </div>
         </>
       )}
