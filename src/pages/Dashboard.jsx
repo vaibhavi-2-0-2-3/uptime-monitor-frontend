@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
+import MonitorAnalytics from "./MonitorAnalytics";
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
@@ -289,6 +290,7 @@ const Dashboard = () => {
                 🗑️ Delete
               </button>
             </div>
+            <MonitorAnalytics monitorId={monitor._id} token={token} />
           </div>
         ))}
       </div>
