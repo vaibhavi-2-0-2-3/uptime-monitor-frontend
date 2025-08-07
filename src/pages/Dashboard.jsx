@@ -8,6 +8,9 @@ const Dashboard = () => {
   const [newUrl, setNewUrl] = useState("");
   const [user, setUser] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [editModal, setEditModal] = useState({ open: false, monitor: null });
+  const [editForm, setEditForm] = useState({ name: "", url: "" });
+  const [editLoading, setEditLoading] = useState(false);
 
   // 🔐 Get token
   const token = localStorage.getItem("token");
@@ -23,23 +26,18 @@ const Dashboard = () => {
       setError("");
       setLoading(true);
 
-      console.log("🔍 Fetching user info...");
       // 1️⃣ Get user info
       const userRes = await axios.get("/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("✅ User info:", userRes.data);
       setUser(userRes.data);
 
-      console.log("🔍 Fetching monitors...");
       // 2️⃣ Get monitors
       const monitorsRes = await axios.get("/monitors", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("✅ Monitors:", monitorsRes.data);
       setMonitors(monitorsRes.data || []);
     } catch (err) {
-      console.error("❌ Dashboard fetch error:", err);
       setError(
         err.response?.data?.message ||
         "Failed to fetch dashboard data. Please try again."
@@ -90,21 +88,58 @@ const Dashboard = () => {
     }
   };
 
-  const handleTestEmail = async () => {
+  // DELETE MONITOR
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this monitor?")) return;
     try {
-      const res = await axios.post(
-        "/monitors/test-email",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Test email sent! Check your inbox.");
+      await axios.delete(`/monitors/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMonitors(monitors.filter((m) => m._id !== id));
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to send test email";
-      alert(errorMessage);
+      alert(err.response?.data?.message || "Failed to delete monitor");
+    }
+  };
+
+  // PAUSE/RESUME MONITOR
+  const handlePauseResume = async (id) => {
+    try {
+      const res = await axios.patch(`/monitors/${id}/pause`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMonitors(monitors.map((m) => (m._id === id ? res.data : m)));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to pause/resume monitor");
+    }
+  };
+
+  // EDIT MONITOR
+  const openEditModal = (monitor) => {
+    setEditForm({ name: monitor.name, url: monitor.url });
+    setEditModal({ open: true, monitor });
+  };
+  const closeEditModal = () => {
+    setEditModal({ open: false, monitor: null });
+    setEditForm({ name: "", url: "" });
+  };
+  const handleEditChange = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
+  };
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setEditLoading(true);
+    try {
+      const res = await axios.patch(
+        `/monitors/${editModal.monitor._id}`,
+        { name: editForm.name, url: editForm.url },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMonitors(monitors.map((m) => (m._id === res.data._id ? res.data : m)));
+      closeEditModal();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update monitor");
+    } finally {
+      setEditLoading(false);
     }
   };
 
@@ -153,21 +188,13 @@ const Dashboard = () => {
 
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Your Monitors:</h2>
-        <div className="flex gap-2">
-          <button
-            onClick={handleTestEmail}
-            className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-          >
-            📧 Test Email
-          </button>
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
-          >
-            {refreshing ? "🔄 Refreshing..." : "🔄 Refresh"}
-          </button>
-        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
+        >
+          {refreshing ? "🔄 Refreshing..." : "🔄 Refresh"}
+        </button>
       </div>
 
       {loading && (
@@ -201,6 +228,9 @@ const Dashboard = () => {
                 {monitor.status === "up" ? "🟢" : monitor.status === "down" ? "🔴" : "⏳"}
               </span>
               <span className="font-medium break-all">{monitor.url}</span>
+              {monitor.isPaused && (
+                <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">Paused</span>
+              )}
             </div>
 
             {/* Status Badge */}
@@ -234,9 +264,83 @@ const Dashboard = () => {
                 Created: <span>{new Date(monitor.createdAt).toLocaleString()}</span>
               </div>
             </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 mt-2">
+              <button
+                title={monitor.isPaused ? "Resume" : "Pause"}
+                onClick={() => handlePauseResume(monitor._id)}
+                className={`px-2 py-1 rounded text-sm font-semibold border ${monitor.isPaused ? "bg-green-100 text-green-800 border-green-300" : "bg-yellow-100 text-yellow-800 border-yellow-300"}`}
+              >
+                {monitor.isPaused ? "▶️ Resume" : "⏸️ Pause"}
+              </button>
+              <button
+                title="Edit"
+                onClick={() => openEditModal(monitor)}
+                className="px-2 py-1 rounded text-sm font-semibold border bg-blue-100 text-blue-800 border-blue-300"
+              >
+                ✏️ Edit
+              </button>
+              <button
+                title="Delete"
+                onClick={() => handleDelete(monitor._id)}
+                className="px-2 py-1 rounded text-sm font-semibold border bg-red-100 text-red-800 border-red-300"
+              >
+                🗑️ Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Edit Modal */}
+      {editModal.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-bold mb-4">Edit Monitor</h3>
+            <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input
+                  name="name"
+                  value={editForm.name}
+                  onChange={handleEditChange}
+                  className="border p-2 rounded w-full"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">URL</label>
+                <input
+                  name="url"
+                  value={editForm.url}
+                  onChange={handleEditChange}
+                  className="border p-2 rounded w-full"
+                  type="url"
+                  required
+                />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                  disabled={editLoading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                  disabled={editLoading}
+                >
+                  {editLoading ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
