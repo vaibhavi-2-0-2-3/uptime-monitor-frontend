@@ -1,122 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import Sidebar from "../components/Sidebar";
 import MonitorPanel from "../components/MonitorPanel";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-  const [user, setUser] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editModal, setEditModal] = useState({ open: false, monitor: null });
   const [editForm, setEditForm] = useState({ name: "", url: "" });
-  const [editLoading, setEditLoading] = useState(false);
 
-  // 🔐 Get token
   const token = localStorage.getItem("token");
 
-  const fetchDashboardData = async () => {
+  useEffect(() => {
     if (!token) {
-      setError("Not authenticated. Please log in.");
-      setLoading(false);
+      navigate("/login");
       return;
     }
+    fetchDashboardData();
+  }, [token, navigate]);
 
+  const fetchDashboardData = async () => {
     try {
-      setError("");
-      setLoading(true);
-
-      // 1️⃣ Get user info
-      const userRes = await axios.get("/auth/me", {
+      const response = await axios.get("/monitors", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUser(userRes.data);
-
-      // 2️⃣ Get monitors
-      const monitorsRes = await axios.get("/monitors", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMonitors(monitorsRes.data || []);
+      setMonitors(response.data);
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        "Failed to fetch dashboard data. Please try again."
-      );
+      setError("Failed to fetch dashboard data. Please try again.");
+      console.error("Error fetching monitors:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, [token]);
+  const handleDelete = async (monitorId) => {
+    if (!window.confirm("Are you sure you want to delete this monitor?")) {
+      return;
+    }
 
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!loading && !refreshing) {
-        fetchDashboardData();
-      }
-    }, 30000); // 30 seconds
-
-    return () => clearInterval(interval);
-  }, [loading, refreshing]);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await fetchDashboardData();
-    setRefreshing(false);
+    try {
+      await axios.delete(`/monitors/${monitorId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMonitors(monitors.filter((m) => m._id !== monitorId));
+    } catch (err) {
+      alert("Failed to delete monitor. Please try again.");
+      console.error("Error deleting monitor:", err);
+    }
   };
 
-  const handleAddMonitor = async (e) => {
-    e.preventDefault();
+  const handlePauseResume = async (monitorId) => {
     try {
-      const res = await axios.post(
-        "/monitors",
-        { url: newUrl },
+      await axios.patch(
+        `/monitors/${monitorId}/pause`,
+        {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setMonitors([...monitors, res.data]);
-      setNewUrl("");
+      setMonitors(
+        monitors.map((m) =>
+          m._id === monitorId ? { ...m, isPaused: !m.isPaused } : m
+        )
+      );
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to add monitor";
-      alert(errorMessage);
+      alert("Failed to update monitor status. Please try again.");
+      console.error("Error updating monitor:", err);
     }
   };
 
-  // DELETE MONITOR
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this monitor?")) return;
-    try {
-      await axios.delete(`/monitors/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMonitors(monitors.filter((m) => m._id !== id));
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete monitor");
-    }
-  };
-
-  // PAUSE/RESUME MONITOR
-  const handlePauseResume = async (id) => {
-    try {
-      const res = await axios.patch(`/monitors/${id}/pause`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMonitors(monitors.map((m) => (m._id === id ? res.data : m)));
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to pause/resume monitor");
-    }
-  };
-
-  // EDIT MONITOR
   const openEditModal = (monitor) => {
     setEditForm({ name: monitor.name, url: monitor.url });
     setEditModal({ open: true, monitor });
@@ -133,21 +89,38 @@ const Dashboard = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    setEditLoading(true);
     try {
-      const res = await axios.patch(
+      await axios.patch(
         `/monitors/${editModal.monitor._id}`,
-        { name: editForm.name, url: editForm.url },
-        { headers: { Authorization: `Bearer ${token}` } }
+        editForm,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      setMonitors(monitors.map((m) => (m._id === res.data._id ? res.data : m)));
+      setMonitors(
+        monitors.map((m) =>
+          m._id === editModal.monitor._id
+            ? { ...m, name: editForm.name, url: editForm.url }
+            : m
+        )
+      );
       closeEditModal();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to update monitor");
-    } finally {
-      setEditLoading(false);
+      alert("Failed to update monitor. Please try again.");
+      console.error("Error updating monitor:", err);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-bg-primary">
+        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-text-secondary">Loading dashboard...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-bg-primary">
@@ -156,92 +129,68 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:ml-0">
-        {/* Top Navigation Bar */}
+        {/* Header */}
         <header className="bg-bg-secondary border-b border-border-color px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded hover:bg-bg-tertiary"
+                className="lg:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-tertiary"
               >
-                ☰
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
               </button>
-              <div>
-                <h1 className="text-xl font-bold text-text-primary">Monitoring</h1>
-                <p className="text-text-secondary text-sm">
-                  {user ? `Welcome back, ${user.username}` : 'Dashboard'}
-                </p>
-              </div>
+              <h1 className="text-2xl font-bold text-text-primary">Monitors</h1>
             </div>
 
             <div className="flex items-center space-x-4">
               <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className="btn-secondary text-sm"
+                onClick={() => navigate('/create-monitor')}
+                className="btn-primary"
               >
-                {refreshing ? "🔄 Refreshing..." : "🔄 Refresh"}
+                + Add Monitor
               </button>
-              <div className="text-text-secondary text-sm">
-                {user?.email}
-              </div>
+              <span className="text-text-secondary">Welcome back!</span>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  navigate('/');
+                }}
+                className="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </header>
 
-        {/* Main Content Area */}
+        {/* Main Content */}
         <main className="flex-1 overflow-auto p-6">
-          {/* Add Monitor Form */}
-          <div className="mb-8">
-            <div className="panel p-6">
-              <h2 className="text-lg font-semibold text-text-primary mb-4">Add New Monitor</h2>
-              <form onSubmit={handleAddMonitor} className="flex flex-col sm:flex-row gap-4">
-                <input
-                  type="url"
-                  placeholder="Enter website URL (e.g., https://example.com)"
-                  className="input-dark flex-1"
-                  value={newUrl}
-                  onChange={(e) => setNewUrl(e.target.value)}
-                  required
-                />
-                <button
-                  type="submit"
-                  className="btn-primary whitespace-nowrap"
-                >
-                  Add Monitor
-                </button>
-              </form>
-            </div>
-          </div>
-
-          {/* Error Display */}
           {error && (
-            <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-accent-red">
-              {error}
+            <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+              <p className="text-accent-red">{error}</p>
             </div>
           )}
 
-          {/* Loading State */}
-          {loading && (
+          {monitors.length === 0 ? (
             <div className="text-center py-12">
-              <div className="text-text-secondary">Loading monitors...</div>
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && !error && monitors.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-text-muted text-lg mb-2">No monitors yet</div>
-              <div className="text-text-secondary">Add your first monitor to get started</div>
-            </div>
-          )}
-
-          {/* Monitor Panels */}
-          {!loading && !error && monitors.length > 0 && (
-            <div>
-              <h2 className="text-xl font-semibold text-text-primary mb-6">
-                Your Monitors ({monitors.length})
+              <div className="text-6xl mb-4">📊</div>
+              <h2 className="text-2xl font-bold text-text-primary mb-2">
+                No monitors yet
               </h2>
+              <p className="text-text-secondary mb-6">
+                Get started by creating your first monitor to track your website's uptime.
+              </p>
+              <button
+                onClick={() => navigate('/create-monitor')}
+                className="btn-primary"
+              >
+                Create Your First Monitor
+              </button>
+            </div>
+          ) : (
+            <div>
               {monitors.map((monitor) => (
                 <MonitorPanel
                   key={monitor._id}
@@ -259,13 +208,19 @@ const Dashboard = () => {
 
       {/* Edit Modal */}
       {editModal.open && (
-        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50">
-          <div className="modal-content p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-bold mb-4 text-text-primary">Edit Monitor</h3>
-            <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+        <div className="modal-overlay" onClick={closeEditModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-text-primary mb-4">
+              Edit Monitor
+            </h2>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-text-primary">Name</label>
+                <label htmlFor="edit-name" className="block text-sm font-medium text-text-primary mb-2">
+                  Monitor Name
+                </label>
                 <input
+                  type="text"
+                  id="edit-name"
                   name="name"
                   value={editForm.name}
                   onChange={handleEditChange}
@@ -274,31 +229,29 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-text-primary">URL</label>
+                <label htmlFor="edit-url" className="block text-sm font-medium text-text-primary mb-2">
+                  URL
+                </label>
                 <input
+                  type="url"
+                  id="edit-url"
                   name="url"
                   value={editForm.url}
                   onChange={handleEditChange}
                   className="input-dark w-full"
-                  type="url"
                   required
                 />
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"
                   onClick={closeEditModal}
                   className="btn-secondary"
-                  disabled={editLoading}
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  disabled={editLoading}
-                >
-                  {editLoading ? "Saving..." : "Save"}
+                <button type="submit" className="btn-primary">
+                  Save Changes
                 </button>
               </div>
             </form>

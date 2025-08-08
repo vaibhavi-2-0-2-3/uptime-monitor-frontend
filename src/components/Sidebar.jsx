@@ -13,6 +13,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
       active: location.pathname === '/dashboard'
     },
     {
+      path: '/create-monitor',
+      icon: '➕',
+      label: 'Create Monitor',
+      active: location.pathname === '/create-monitor'
+    },
+    {
       path: '/incidents',
       icon: '🚨',
       label: 'Incidents',
@@ -64,12 +70,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between p-4 border-b border-border-color">
-            <div className="flex items-center space-x-2">
+            <Link to="/dashboard" className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-accent-green rounded-full"></div>
               <span className={`font-bold text-lg ${collapsed ? 'hidden' : 'block'}`}>
                 UptimeMonitor
               </span>
-            </div>
+            </Link>
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="hidden lg:block p-1 rounded hover:bg-bg-tertiary"
@@ -104,7 +110,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
           {/* User section */}
           <div className="p-4 border-t border-border-color">
             <div className={`flex items-center space-x-3 ${collapsed ? 'justify-center' : ''}`}>
-              <div className="w-8 h-8 bg-accent-blue rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 bg-accent-green rounded-full flex items-center justify-center text-white font-semibold">
                 U
               </div>
               {!collapsed && (
