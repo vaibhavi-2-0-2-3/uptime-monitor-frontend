@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
+import PulseLogo from "../PulseLogo";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Register = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-2 h-2 bg-accent-green rounded-full"></div>
+            <PulseLogo className="w-8 h-8" color="#10b981" />
             <span className="text-2xl font-bold text-text-primary">UptimeMonitor</span>
           </Link>
           <h1 className="text-3xl font-bold text-text-primary mb-2">Create your account</h1>

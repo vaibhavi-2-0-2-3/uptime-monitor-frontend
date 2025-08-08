@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import PulseLogo from './PulseLogo';
 
 const Sidebar = ({ isOpen, onToggle }) => {
   const location = useLocation();
@@ -47,6 +48,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
       icon: '🔗',
       label: 'Integrations & API',
       active: location.pathname === '/integrations'
+    },
+    {
+      path: '/settings',
+      icon: '⚙️',
+      label: 'Settings',
+      active: location.pathname === '/settings'
     }
   ];
 
@@ -71,7 +78,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
           {/* Logo */}
           <div className="flex items-center justify-between p-4 border-b border-border-color">
             <Link to="/dashboard" className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-accent-green rounded-full"></div>
+              <PulseLogo className="w-6 h-6" color="#10b981" />
               <span className={`font-bold text-lg ${collapsed ? 'hidden' : 'block'}`}>
                 UptimeMonitor
               </span>

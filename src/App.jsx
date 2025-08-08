@@ -5,6 +5,7 @@ import Register from "./components/Auth/Register";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import CreateMonitor from "./pages/CreateMonitor";
+import Settings from "./pages/Settings";
 import Features from "./pages/Features";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
@@ -34,6 +35,7 @@ const App = () => {
         {/* Protected Routes */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-monitor" element={<CreateMonitor />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </div>
   );

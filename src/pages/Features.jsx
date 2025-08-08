@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PulseLogo from '../components/PulseLogo';
 
 const Features = () => {
   return (
@@ -9,7 +10,7 @@ const Features = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-accent-green rounded-full"></div>
+              <PulseLogo className="w-6 h-6" color="#10b981" />
               <span className="text-xl font-bold text-text-primary">UptimeMonitor</span>
             </Link>
             <div className="flex items-center space-x-4">
