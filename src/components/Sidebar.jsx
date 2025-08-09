@@ -42,18 +42,6 @@ const Sidebar = ({ isOpen, onToggle }) => {
       icon: '👥',
       label: 'Team Members',
       active: location.pathname === '/team'
-    },
-    {
-      path: '/integrations',
-      icon: '🔗',
-      label: 'Integrations & API',
-      active: location.pathname === '/integrations'
-    },
-    {
-      path: '/settings',
-      icon: '⚙️',
-      label: 'Settings',
-      active: location.pathname === '/settings'
     }
   ];
 
