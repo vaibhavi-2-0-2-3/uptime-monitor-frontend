@@ -151,7 +151,7 @@ const Dashboard = () => {
               >
                 + Add Monitor
               </button>
-              <span className="text-text-secondary">Welcome back!</span>
+              
               <button
                 onClick={() => {
                   localStorage.removeItem('token');
