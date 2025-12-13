@@ -3,18 +3,19 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
+// import Landing from "./pages/Landing";
 import CreateMonitor from "./pages/CreateMonitor";
 import Settings from "./pages/Settings";
 import Features from "./pages/Features";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import { Landing } from "./pages/Landing";
 
 const App = () => {
   return (
     <div className="min-h-screen">
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
