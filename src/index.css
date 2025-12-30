@@ -9,87 +9,266 @@
   }
 }
 
-/* ---------- Theme Variables ---------- */
+/* ---------- COHESIVE DESIGN SYSTEM ---------- */
+/* Dark-First Theme (Landing Page Inspired) */
 @layer base {
   :root {
-    /* Tailwind / shadcn tokens */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --border: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-
-    /* Your custom green theme */
+    /* Primary Colors - Dark Theme (Default) */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1a1a1a;
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #666666;
+    
+    /* Border Colors */
+    --border-color: #333333;
+    --border-light: #4a4a4a;
+    
+    /* Accent Colors */
     --accent-green: #10b981;
     --accent-green-hover: #059669;
     --accent-green-light: #34d399;
     --accent-red: #ef4444;
     --accent-yellow: #f59e0b;
     --accent-blue: #3b82f6;
-  }
-
-  .dark {
+    
+    /* Status Colors */
+    --status-success: #10b981;
+    --status-warning: #f59e0b;
+    --status-error: #ef4444;
+    --status-info: #3b82f6;
+    
+    /* Component specific */
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 0 0% 5.8%;
     --card-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
+    --border: 0 0% 20%;
     --ring: 0 0% 83.1%;
+    --radius: 0.5rem;
+  }
 
-    /* Dark green theme stays same */
-    --accent-green: #10b981;
-    --accent-green-hover: #059669;
-    --accent-green-light: #34d399;
+  /* Light Mode Support */
+  .light {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --border-color: #e2e8f0;
+    --border-light: #cbd5e1;
+    
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --border: 0 0% 89.8%;
   }
 }
 
 /* ---------- Base Styles ---------- */
 @layer base {
   * {
-    @apply border-border;
+    @apply border-[color:var(--border-color)];
+  }
+
+  html {
+    @apply scroll-smooth;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[color:var(--bg-primary)] text-[color:var(--text-primary)];
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
       sans-serif;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-[color:var(--text-primary)];
+  }
+
+  p {
+    @apply text-[color:var(--text-secondary)] leading-relaxed;
+  }
+
+  a {
+    @apply text-[color:var(--accent-green)] hover:text-[color:var(--accent-green-hover)] transition-colors;
+  }
+
+  input, textarea, select {
+    @apply bg-[color:var(--bg-secondary)] border border-[color:var(--border-color)] text-[color:var(--text-primary)] rounded-lg px-4 py-2 placeholder-[color:var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-green)] focus:border-transparent transition;
+  }
 }
 
-/* ---------- Custom Components ---------- */
+/* ---------- Custom Components - Buttons ---------- */
 @layer components {
-  .panel {
-    @apply bg-card border rounded-xl shadow-sm;
-  }
-
-  .card {
-    @apply bg-card border rounded-lg p-6;
-  }
-
-  .feature-card {
-    @apply bg-card border rounded-xl p-8 transition-all;
-  }
-
-  .feature-card:hover {
-    border-color: var(--accent-green);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.15);
-  }
-
   .btn-primary {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
     background-color: var(--accent-green);
-    @apply text-white px-6 py-3 rounded-lg font-semibold transition;
+    color: #000;
   }
 
   .btn-primary:hover {
     background-color: var(--accent-green-hover);
+    @apply shadow-lg shadow-green-500/20;
+  }
+
+  .btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-muted text-foreground px-6 py-3 rounded-lg border transition;
+    @apply px-6 py-3 rounded-lg font-semibold border border-[color:var(--border-color)] text-[color:var(--text-primary)] bg-[color:var(--bg-secondary)] transition-all duration-300;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-[color:var(--bg-tertiary)] border-[color:var(--accent-green)];
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 rounded-lg font-semibold border-2 border-[color:var(--accent-green)] text-[color:var(--accent-green)] bg-transparent transition-all duration-300;
+  }
+
+  .btn-outline:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+  }
+
+  .btn-danger {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+    background-color: var(--status-error);
+    color: #fff;
+  }
+
+  .btn-danger:hover {
+    @apply shadow-lg opacity-90;
+    box-shadow: 0 10px 15px rgba(239, 68, 68, 0.2);
+  }
+
+  .btn-small {
+    @apply px-4 py-2 text-sm font-medium rounded-md transition-all duration-300;
+  }
+
+  .btn-small-primary {
+    @apply btn-small bg-[color:var(--accent-green)] text-black hover:bg-[color:var(--accent-green-hover)];
+  }
+
+  .btn-small-secondary {
+    @apply btn-small bg-[color:var(--bg-secondary)] text-[color:var(--text-primary)] border border-[color:var(--border-color)] hover:border-[color:var(--accent-green)];
+  }
+
+  .btn-small-danger {
+    @apply btn-small bg-[color:var(--accent-red)] text-white;
+  }
+
+  .btn-small-danger:hover {
+    @apply opacity-90;
+  }
+}
+
+/* ---------- Custom Components - Cards & Panels ---------- */
+@layer components {
+  .card {
+    @apply bg-[color:var(--bg-secondary)] border border-[color:var(--border-color)] rounded-xl p-6 transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply border-[color:var(--border-light)];
+  }
+
+  .card-elevated {
+    @apply card shadow-lg shadow-black/20;
+  }
+
+  .panel {
+    @apply bg-[color:var(--bg-secondary)] border border-[color:var(--border-color)] rounded-xl shadow-md;
+  }
+
+  .feature-card {
+    @apply bg-gradient-to-br from-[#111111] to-[#1a1a1a] border border-[color:var(--border-color)] rounded-xl p-8 transition-all duration-300;
+  }
+
+  .feature-card:hover {
+    @apply border-[color:var(--accent-green)] shadow-lg;
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+  }
+
+  .section-card {
+    @apply bg-[color:var(--bg-secondary)] border border-[color:var(--border-color)] rounded-lg p-6;
+  }
+}
+
+/* ---------- Custom Components - Status Indicators ---------- */
+@layer components {
+  .status-badge {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .status-success {
+    @apply status-badge text-[color:var(--status-success)];
+    background-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .status-error {
+    @apply status-badge text-[color:var(--status-error)];
+    background-color: rgba(239, 68, 68, 0.2);
+  }
+
+  .status-warning {
+    @apply status-badge text-[color:var(--status-warning)];
+    background-color: rgba(245, 158, 11, 0.2);
+  }
+
+  .status-info {
+    @apply status-badge text-[color:var(--status-info)];
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* ---------- Custom Components - Alerts ---------- */
+@layer components {
+  .alert {
+    @apply p-4 rounded-lg border flex items-start gap-3;
+  }
+
+  .alert-success {
+    @apply alert text-[color:var(--status-success)];
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  .alert-error {
+    @apply alert text-[color:var(--status-error)];
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .alert-warning {
+    @apply alert text-[color:var(--status-warning)];
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+
+  .alert-info {
+    @apply alert text-[color:var(--status-info)];
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* ---------- Custom Components - Badges & Labels ---------- */
+@layer components {
+  .badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-[color:var(--bg-tertiary)] border border-[color:var(--border-color)] text-[color:var(--text-primary)];
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-[color:var(--text-primary)] mb-2;
   }
 }
 

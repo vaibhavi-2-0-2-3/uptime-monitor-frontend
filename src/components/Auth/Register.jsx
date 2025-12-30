@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import axios from "../../api/axios";
 import PulseLogo from "../PulseLogo";
+import { fadeUp, popIn } from "../../utils/motion-presets";
+
+const BRAND = "#CCFF11";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -34,27 +38,61 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 mb-6">
-            <PulseLogo className="w-8 h-8" color="#10b981" />
-            <span className="text-2xl font-bold text-text-primary">UptimeMonitor</span>
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex items-center justify-center px-4 py-12">
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={fadeUp}
+        className="max-w-md w-full"
+      >
+        <motion.div className="text-center mb-8" variants={fadeUp}>
+          <Link
+            to="/"
+            className="inline-flex items-center space-x-2 mb-8 group"
+            whileHover={{ y: -2 }}
+          >
+            <motion.div
+              className="transition group-hover:drop-shadow-[0_0_16px_rgba(204,255,17,0.6)]"
+              whileHover={{ scale: 1.05 }}
+            >
+              <PulseLogo className="w-8 h-8" color={BRAND} />
+            </motion.div>
+            <span className="text-2xl font-extrabold tracking-tight">PulseWatch</span>
           </Link>
-          <h1 className="text-3xl font-bold text-text-primary mb-2">Create your account</h1>
-          <p className="text-text-secondary">Start monitoring your websites today</p>
-        </div>
+          <motion.h1
+            className="text-4xl font-extrabold tracking-tight mb-3"
+            variants={fadeUp}
+          >
+            Create your account
+          </motion.h1>
+          <motion.p
+            className="text-lg text-black/70 dark:text-white/70"
+            variants={fadeUp}
+          >
+            Start monitoring your websites today
+          </motion.p>
+        </motion.div>
 
-        <div className="panel p-8">
+        <motion.div
+          className="bg-white/70 dark:bg-black/50 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-xl shadow-lg p-8"
+          variants={popIn}
+        >
           {error && (
-            <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-              <p className="text-accent-red text-sm">{error}</p>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-lg"
+            >
+              <p className="text-red-600 dark:text-red-400 text-sm font-medium">{error}</p>
+            </motion.div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
+            <motion.div variants={fadeUp}>
+              <label
+                htmlFor="name"
+                className="block text-sm font-semibold mb-2"
+              >
                 Full Name
               </label>
               <input
@@ -64,13 +102,17 @@ const Register = () => {
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="input-dark w-full"
+                className="w-full bg-white/50 dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-4 py-3 text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent transition-all"
                 placeholder="Enter your full name"
+                style={{ "--brand": BRAND }}
               />
-            </div>
+            </motion.div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
+            <motion.div variants={fadeUp}>
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -80,13 +122,17 @@ const Register = () => {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="input-dark w-full"
+                className="w-full bg-white/50 dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-4 py-3 text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent transition-all"
                 placeholder="Enter your email"
+                style={{ "--brand": BRAND }}
               />
-            </div>
+            </motion.div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
+            <motion.div variants={fadeUp}>
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold mb-2"
+              >
                 Password
               </label>
               <input
@@ -96,31 +142,44 @@ const Register = () => {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="input-dark w-full"
+                className="w-full bg-white/50 dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-4 py-3 text-black dark:text-white placeholder-black/40 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent transition-all"
                 placeholder="Create a password"
                 minLength={6}
+                style={{ "--brand": BRAND }}
               />
-            </div>
+            </motion.div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
-            >
-              {loading ? "Creating account..." : "Create Account"}
-            </button>
+            <motion.div variants={popIn}>
+              <motion.button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-[var(--brand)] text-black hover:bg-[color:rgb(204,255,17,0.9)] px-6 py-3 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ "--brand": BRAND }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {loading ? "Creating account..." : "Create Account"}
+              </motion.button>
+            </motion.div>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-text-secondary">
+          <motion.div
+            className="mt-6 text-center"
+            variants={fadeUp}
+          >
+            <p className="text-black/70 dark:text-white/70">
               Already have an account?{" "}
-              <Link to="/login" className="text-accent-green hover:text-accent-green-light transition-colors">
+              <Link
+                to="/login"
+                className="text-[var(--brand)] hover:text-[color:rgb(204,255,17,0.8)] font-semibold transition-colors"
+                style={{ "--brand": BRAND }}
+              >
                 Sign in
               </Link>
             </p>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

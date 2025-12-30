@@ -113,38 +113,35 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-bg-primary">
+      <div className="flex h-screen bg-[color:var(--bg-primary)]">
         <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-text-secondary">Loading dashboard...</div>
+          <div className="text-[color:var(--text-secondary)]">Loading dashboard...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-bg-primary">
+    <div className="flex h-screen bg-[color:var(--bg-primary)]">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:ml-0">
         {/* Header */}
-        <header className="bg-bg-secondary border-b border-border-color px-6 py-4">
+        <header className="bg-[color:var(--bg-secondary)] border-b border-[color:var(--border-color)] px-6 py-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-tertiary"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              <h1 className="text-2xl font-bold text-text-primary">Monitors</h1>
-            </div>
-
-            <div className="flex items-center space-x-4">
+              className="lg:hidden p-2 rounded-md text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-tertiary)] transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <h1 className="text-2xl font-bold text-[color:var(--text-primary)]">Monitors</h1>
               <button
                 onClick={() => navigate('/create-monitor')}
                 className="btn-primary"
@@ -157,7 +154,7 @@ const Dashboard = () => {
                   localStorage.removeItem('token');
                   navigate('/');
                 }}
-                className="text-text-secondary hover:text-text-primary transition-colors"
+                className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors px-4 py-2 rounded-lg hover:bg-[color:var(--bg-tertiary)]"
               >
                 Logout
               </button>
@@ -166,20 +163,21 @@ const Dashboard = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-6 space-y-6">
           {error && (
-            <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-              <p className="text-accent-red">{error}</p>
+            <div className="alert-error">
+              <span>⚠️</span>
+              <p>{error}</p>
             </div>
           )}
 
           {monitors.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="card p-12 text-center">
               <div className="text-6xl mb-4">📊</div>
-              <h2 className="text-2xl font-bold text-text-primary mb-2">
+              <h2 className="text-2xl font-bold text-[color:var(--text-primary)] mb-2">
                 No monitors yet
               </h2>
-              <p className="text-text-secondary mb-6">
+              <p className="text-[color:var(--text-secondary)] mb-6">
                 Get started by creating your first monitor to track your website's uptime.
               </p>
               <button
@@ -208,14 +206,14 @@ const Dashboard = () => {
 
       {/* Edit Modal */}
       {editModal.open && (
-        <div className="modal-overlay" onClick={closeEditModal}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold text-text-primary mb-4">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={closeEditModal}>
+          <div className="card p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">
               Edit Monitor
             </h2>
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label htmlFor="edit-name" className="block text-sm font-medium text-text-primary mb-2">
+                <label htmlFor="edit-name" className="label">
                   Monitor Name
                 </label>
                 <input
@@ -224,12 +222,12 @@ const Dashboard = () => {
                   name="name"
                   value={editForm.name}
                   onChange={handleEditChange}
-                  className="input-dark w-full"
+                  className="w-full"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="edit-url" className="block text-sm font-medium text-text-primary mb-2">
+                <label htmlFor="edit-url" className="label">
                   URL
                 </label>
                 <input
@@ -238,7 +236,7 @@ const Dashboard = () => {
                   name="url"
                   value={editForm.url}
                   onChange={handleEditChange}
-                  className="input-dark w-full"
+                  className="w-full"
                   required
                 />
               </div>

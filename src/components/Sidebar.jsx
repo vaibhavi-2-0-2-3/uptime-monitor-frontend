@@ -50,7 +50,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
@@ -58,13 +58,13 @@ const Sidebar = ({ isOpen, onToggle }) => {
       {/* Sidebar */}
       <div className={`
         fixed lg:static inset-y-0 left-0 z-50
-        sidebar ${collapsed ? 'sidebar-collapsed' : ''}
+        bg-[color:var(--bg-secondary)] w-64 border-r border-[color:var(--border-color)] shadow-lg
         transform ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         transition-transform duration-300 ease-in-out
       `}>
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between p-4 border-b border-border-color">
+          <div className="flex items-center justify-between p-4 border-b border-[color:var(--border-color)]">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <PulseLogo className="w-6 h-6" color="#10b981" />
               <span className={`font-bold text-lg ${collapsed ? 'hidden' : 'block'}`}>
@@ -73,21 +73,24 @@ const Sidebar = ({ isOpen, onToggle }) => {
             </Link>
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="hidden lg:block p-1 rounded hover:bg-bg-tertiary"
+              className="hidden lg:block p-1 rounded hover:bg-[color:var(--bg-tertiary)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
             >
               {collapsed ? '→' : '←'}
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 p-4 space-y-1">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`
-                  nav-item flex items-center space-x-3
-                  ${item.active ? 'active' : ''}
+                  flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all
+                  ${item.active 
+                    ? 'bg-[color:var(--accent-green-light)] text-[color:var(--bg-primary)]' 
+                    : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-tertiary)]'
+                  }
                   ${collapsed ? 'justify-center' : ''}
                 `}
                 onClick={() => {
@@ -103,15 +106,15 @@ const Sidebar = ({ isOpen, onToggle }) => {
           </nav>
 
           {/* User section */}
-          <div className="p-4 border-t border-border-color">
+          <div className="p-4 border-t border-[color:var(--border-color)]">
             <div className={`flex items-center space-x-3 ${collapsed ? 'justify-center' : ''}`}>
-              <div className="w-8 h-8 bg-accent-green rounded-full flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 bg-[color:var(--accent-green)] rounded-full flex items-center justify-center text-[color:var(--bg-primary)] font-semibold">
                 U
               </div>
               {!collapsed && (
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium truncate">User</div>
-                  <div className="text-xs text-text-muted truncate">Team Owner</div>
+                  <div className="text-sm font-medium text-[color:var(--text-primary)] truncate">User</div>
+                  <div className="text-xs text-[color:var(--text-muted)] truncate">Team Owner</div>
                 </div>
               )}
             </div>

@@ -176,46 +176,46 @@ const Settings = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-bg-primary">
+      <div className="flex h-screen bg-[color:var(--bg-primary)]">
         <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-text-secondary">Loading settings...</div>
+          <div className="text-[color:var(--text-secondary)]">Loading settings...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-bg-primary">
+    <div className="flex h-screen bg-[color:var(--bg-primary)]">
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
       
       <div className="flex-1 flex flex-col lg:ml-0">
         {/* Header */}
-        <header className="bg-bg-secondary border-b border-border-color px-6 py-4">
+        <header className="bg-[color:var(--bg-secondary)] border-b border-[color:var(--border-color)] px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-tertiary"
+                className="lg:hidden p-2 rounded-md text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-tertiary)]"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
+              <h1 className="text-2xl font-bold text-[color:var(--text-primary)]">Settings</h1>
             </div>
           </div>
         </header>
 
         {/* Toast Notifications */}
         {success && (
-          <div className="fixed top-4 right-4 z-50 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
-            <p className="text-accent-green text-sm">{success}</p>
+          <div className="alert-success fixed top-4 right-4 z-50">
+            <p className="text-[color:var(--accent-green)] text-sm">{success}</p>
           </div>
         )}
         {error && (
-          <div className="fixed top-4 right-4 z-50 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-            <p className="text-accent-red text-sm">{error}</p>
+          <div className="alert-error fixed top-4 right-4 z-50">
+            <p className="text-[color:var(--accent-red)] text-sm">{error}</p>
           </div>
         )}
 
@@ -224,21 +224,21 @@ const Settings = () => {
           <div className="max-w-4xl mx-auto space-y-6">
             
             {/* Profile Section */}
-            <div className="panel p-6">
-              <h2 className="text-xl font-bold text-text-primary mb-4">Profile</h2>
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">Profile</h2>
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-accent-green rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="w-16 h-16 bg-[color:var(--accent-green)] rounded-full flex items-center justify-center text-[color:var(--bg-primary)] text-xl font-bold">
                   {user?.username?.charAt(0).toUpperCase() || 'U'}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-text-primary">{user?.username}</h3>
-                  <p className="text-text-secondary">{user?.email}</p>
+                  <h3 className="text-lg font-semibold text-[color:var(--text-primary)]">{user?.username}</h3>
+                  <p className="text-[color:var(--text-secondary)]">{user?.email}</p>
                 </div>
               </div>
               
               <form onSubmit={handleProfileUpdate} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
+                  <label htmlFor="name" className="label">
                     Full Name
                   </label>
                   <input
@@ -246,12 +246,12 @@ const Settings = () => {
                     id="name"
                     value={profileForm.name}
                     onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
-                    className="input-dark w-full"
+                    className="input w-full"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
+                  <label htmlFor="email" className="label">
                     Email Address
                   </label>
                   <input
@@ -259,7 +259,7 @@ const Settings = () => {
                     id="email"
                     value={profileForm.email}
                     onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
-                    className="input-dark w-full"
+                    className="input w-full"
                     required
                   />
                 </div>
@@ -274,11 +274,11 @@ const Settings = () => {
             </div>
 
             {/* Password Change */}
-            <div className="panel p-6">
-              <h2 className="text-xl font-bold text-text-primary mb-4">Change Password</h2>
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">Change Password</h2>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div>
-                  <label htmlFor="currentPassword" className="block text-sm font-medium text-text-primary mb-2">
+                  <label htmlFor="currentPassword" className="label">
                     Current Password
                   </label>
                   <input
@@ -286,12 +286,12 @@ const Settings = () => {
                     id="currentPassword"
                     value={passwordForm.currentPassword}
                     onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
-                    className="input-dark w-full"
+                    className="input w-full"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="newPassword" className="block text-sm font-medium text-text-primary mb-2">
+                  <label htmlFor="newPassword" className="label">
                     New Password
                   </label>
                   <input
@@ -299,13 +299,13 @@ const Settings = () => {
                     id="newPassword"
                     value={passwordForm.newPassword}
                     onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
-                    className="input-dark w-full"
+                    className="input w-full"
                     required
                     minLength={6}
                   />
                 </div>
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-primary mb-2">
+                  <label htmlFor="confirmPassword" className="label">
                     Confirm New Password
                   </label>
                   <input
@@ -313,7 +313,7 @@ const Settings = () => {
                     id="confirmPassword"
                     value={passwordForm.confirmPassword}
                     onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
-                    className="input-dark w-full"
+                    className="input w-full"
                     required
                   />
                 </div>
@@ -328,18 +328,18 @@ const Settings = () => {
             </div>
 
             {/* Notification Settings */}
-            <div className="panel p-6">
-              <h2 className="text-xl font-bold text-text-primary mb-4">Notification Settings</h2>
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">Notification Settings</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-text-primary font-medium">Email Alerts</h3>
-                    <p className="text-text-secondary text-sm">Receive email notifications when monitors go down</p>
+                    <h3 className="text-[color:var(--text-primary)] font-medium">Email Alerts</h3>
+                    <p className="text-[color:var(--text-secondary)] text-sm">Receive email notifications when monitors go down</p>
                   </div>
                   <button
                     onClick={() => handleNotificationToggle('emailAlerts')}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      notificationSettings.emailAlerts ? 'bg-accent-green' : 'bg-bg-tertiary'
+                      notificationSettings.emailAlerts ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
                     }`}
                   >
                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -350,13 +350,13 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-text-primary font-medium">SMS Alerts</h3>
-                    <p className="text-text-secondary text-sm">Receive SMS notifications (coming soon)</p>
+                    <h3 className="text-[color:var(--text-primary)] font-medium">SMS Alerts</h3>
+                    <p className="text-[color:var(--text-secondary)] text-sm">Receive SMS notifications (coming soon)</p>
                   </div>
                   <button
                     onClick={() => handleNotificationToggle('smsAlerts')}
                     disabled
-                    className="relative inline-flex h-6 w-11 items-center rounded-full bg-bg-tertiary opacity-50 cursor-not-allowed"
+                    className="relative inline-flex h-6 w-11 items-center rounded-full bg-[color:var(--bg-tertiary)] opacity-50 cursor-not-allowed"
                   >
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-1" />
                   </button>
@@ -364,13 +364,13 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-text-primary font-medium">Telegram Alerts</h3>
-                    <p className="text-text-secondary text-sm">Receive Telegram notifications (coming soon)</p>
+                    <h3 className="text-[color:var(--text-primary)] font-medium">Telegram Alerts</h3>
+                    <p className="text-[color:var(--text-secondary)] text-sm">Receive Telegram notifications (coming soon)</p>
                   </div>
                   <button
                     onClick={() => handleNotificationToggle('telegramAlerts')}
                     disabled
-                    className="relative inline-flex h-6 w-11 items-center rounded-full bg-bg-tertiary opacity-50 cursor-not-allowed"
+                    className="relative inline-flex h-6 w-11 items-center rounded-full bg-[color:var(--bg-tertiary)] opacity-50 cursor-not-allowed"
                   >
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-1" />
                   </button>
@@ -379,17 +379,17 @@ const Settings = () => {
             </div>
 
             {/* Theme Settings */}
-            <div className="panel p-6">
-              <h2 className="text-xl font-bold text-text-primary mb-4">Theme Settings</h2>
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">Theme Settings</h2>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-text-primary font-medium">Dark Mode</h3>
-                  <p className="text-text-secondary text-sm">Toggle between dark and light themes</p>
+                  <h3 className="text-[color:var(--text-primary)] font-medium">Dark Mode</h3>
+                  <p className="text-[color:var(--text-secondary)] text-sm">Toggle between dark and light themes</p>
                 </div>
                 <button
                   onClick={handleThemeToggle}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    theme === 'dark' ? 'bg-accent-green' : 'bg-bg-tertiary'
+                    theme === 'dark' ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
                   }`}
                 >
                   <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -400,11 +400,11 @@ const Settings = () => {
             </div>
 
             {/* API Key Management */}
-            <div className="panel p-6">
-              <h2 className="text-xl font-bold text-text-primary mb-4">API Key Management</h2>
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">API Key Management</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-2">
+                  <label className="label">
                     Your API Key
                   </label>
                   <div className="flex space-x-2">
@@ -412,7 +412,7 @@ const Settings = () => {
                       type="text"
                       value={apiKey || '••••••••••••••••••••••••••••••••'}
                       readOnly
-                      className="input-dark flex-1 font-mono text-sm"
+                      className="input flex-1 font-mono text-sm"
                     />
                     <button
                       onClick={() => navigator.clipboard.writeText(apiKey)}
@@ -429,17 +429,17 @@ const Settings = () => {
             </div>
 
             {/* Danger Zone */}
-            <div className="panel p-6 border border-red-500/30">
-              <h2 className="text-xl font-bold text-accent-red mb-4">Danger Zone</h2>
+            <div className="card p-6 border border-[color:var(--accent-red)]/30">
+              <h2 className="text-xl font-bold text-[color:var(--accent-red)] mb-4">Danger Zone</h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-text-primary font-medium mb-2">Delete Account</h3>
-                  <p className="text-text-secondary text-sm mb-4">
+                  <h3 className="text-[color:var(--text-primary)] font-medium mb-2">Delete Account</h3>
+                  <p className="text-[color:var(--text-secondary)] text-sm mb-4">
                     This action cannot be undone. All your data will be permanently deleted.
                   </p>
                   <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="btn-secondary bg-red-900/20 border-red-500/30 text-accent-red hover:bg-red-900/30"
+                    className="btn-danger"
                   >
                     Delete Account
                   </button>
@@ -448,7 +448,7 @@ const Settings = () => {
             </div>
 
             {/* Logout */}
-            <div className="panel p-6">
+            <div className="card p-6">
               <button
                 onClick={handleLogout}
                 className="btn-secondary w-full"
@@ -462,22 +462,22 @@ const Settings = () => {
 
       {/* Delete Account Modal */}
       {showDeleteModal && (
-        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold text-accent-red mb-4">Delete Account</h2>
-            <p className="text-text-secondary mb-4">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowDeleteModal(false)}>
+          <div className="card p-6 max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-[color:var(--accent-red)] mb-4">Delete Account</h2>
+            <p className="text-[color:var(--text-secondary)] mb-4">
               This action cannot be undone. All your monitors, data, and settings will be permanently deleted.
             </p>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
+                <label className="label">
                   Type "DELETE" to confirm
                 </label>
                 <input
                   type="text"
                   value={deleteConfirm}
                   onChange={(e) => setDeleteConfirm(e.target.value)}
-                  className="input-dark w-full"
+                  className="input w-full"
                   placeholder="DELETE"
                 />
               </div>
@@ -491,7 +491,7 @@ const Settings = () => {
                 <button
                   onClick={handleDeleteAccount}
                   disabled={deleteConfirm !== 'DELETE'}
-                  className="btn-secondary bg-red-900/20 border-red-500/30 text-accent-red hover:bg-red-900/30 disabled:opacity-50"
+                  className="btn-danger disabled:opacity-50"
                 >
                   Delete Account
                 </button>

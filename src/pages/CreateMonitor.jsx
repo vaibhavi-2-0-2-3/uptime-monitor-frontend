@@ -60,33 +60,33 @@ const CreateMonitor = () => {
   };
 
   return (
-    <div className="flex h-screen bg-bg-primary">
+    <div className="flex h-screen bg-[color:var(--bg-primary)]">
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="flex-1 flex flex-col lg:ml-0">
         {/* Header */}
-        <header className="bg-bg-secondary border-b border-border-color px-6 py-4">
+        <header className="bg-[color:var(--bg-secondary)] border-b border-[color:var(--border-color)] px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-tertiary"
+                className="lg:hidden p-2 rounded-md text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-tertiary)]"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-2xl font-bold text-text-primary">Create New Monitor</h1>
+              <h1 className="text-2xl font-bold text-[color:var(--text-primary)]">Create New Monitor</h1>
             </div>
 
             <div className="flex items-center space-x-4">
-              <span className="text-text-secondary">Welcome back!</span>
+              <span className="text-[color:var(--text-secondary)]">Welcome back!</span>
               <button
                 onClick={() => {
                   localStorage.removeItem('token');
                   navigate('/');
                 }}
-                className="text-text-secondary hover:text-text-primary transition-colors"
+                className="btn-secondary"
               >
                 Logout
               </button>
@@ -97,30 +97,30 @@ const CreateMonitor = () => {
         {/* Main Content */}
         <main className="flex-1 overflow-auto p-6">
           <div className="max-w-2xl mx-auto">
-            <div className="panel p-8">
+            <div className="card p-8">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-2xl font-bold text-[color:var(--text-primary)] mb-2">
                   Monitor Configuration
                 </h2>
-                <p className="text-text-secondary">
+                <p className="text-[color:var(--text-secondary)]">
                   Set up a new monitor to track your website's uptime and performance.
                 </p>
               </div>
 
               {error && (
-                <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-                  <p className="text-accent-red">{error}</p>
+                <div className="alert-error mb-6">
+                  <p className="text-[color:var(--accent-red)]">{error}</p>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Basic Information */}
                 <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-4">Basic Information</h3>
+                  <h3 className="text-lg font-semibold text-[color:var(--text-primary)] mb-4">Basic Information</h3>
 
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="name" className="label">
                         Monitor Name
                       </label>
                       <input
@@ -130,15 +130,15 @@ const CreateMonitor = () => {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="My Website Monitor"
-                        className="input-dark w-full"
+                        className="input w-full"
                       />
-                      <p className="text-xs text-text-muted mt-1">
+                      <p className="text-xs text-[color:var(--text-muted)] mt-1">
                         Leave empty to auto-generate from URL
                       </p>
                     </div>
 
                     <div>
-                      <label htmlFor="url" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="url" className="label">
                         URL to Monitor *
                       </label>
                       <input
@@ -149,12 +149,12 @@ const CreateMonitor = () => {
                         onChange={handleChange}
                         placeholder="https://example.com"
                         required
-                        className="input-dark w-full"
+                        className="input w-full"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="description" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="description" className="label">
                         Description (Optional)
                       </label>
                       <textarea
@@ -164,7 +164,7 @@ const CreateMonitor = () => {
                         onChange={handleChange}
                         placeholder="Brief description of what this monitor tracks..."
                         rows={3}
-                        className="input-dark w-full"
+                        className="input w-full"
                       />
                     </div>
                   </div>
@@ -172,11 +172,11 @@ const CreateMonitor = () => {
 
                 {/* Monitoring Settings */}
                 <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-4">Monitoring Settings</h3>
+                  <h3 className="text-lg font-semibold text-[color:var(--text-primary)] mb-4">Monitoring Settings</h3>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="frequency" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="frequency" className="label">
                         Check Frequency
                       </label>
                       <select
@@ -184,7 +184,7 @@ const CreateMonitor = () => {
                         name="frequency"
                         value={formData.frequency}
                         onChange={handleChange}
-                        className="input-dark w-full"
+                        className="input w-full"
                       >
                         <option value="1">Every 1 minute</option>
                         <option value="5">Every 5 minutes</option>
@@ -195,7 +195,7 @@ const CreateMonitor = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="timeout" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="timeout" className="label">
                         Timeout (seconds)
                       </label>
                       <select
@@ -203,7 +203,7 @@ const CreateMonitor = () => {
                         name="timeout"
                         value={formData.timeout}
                         onChange={handleChange}
-                        className="input-dark w-full"
+                        className="input w-full"
                       >
                         <option value="10">10 seconds</option>
                         <option value="30">30 seconds</option>
@@ -213,7 +213,7 @@ const CreateMonitor = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="retries" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="retries" className="label">
                         Retry Attempts
                       </label>
                       <select
@@ -221,7 +221,7 @@ const CreateMonitor = () => {
                         name="retries"
                         value={formData.retries}
                         onChange={handleChange}
-                        className="input-dark w-full"
+                        className="input w-full"
                       >
                         <option value="1">1 retry</option>
                         <option value="2">2 retries</option>
@@ -231,7 +231,7 @@ const CreateMonitor = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="expectedStatus" className="block text-sm font-medium text-text-primary mb-2">
+                      <label htmlFor="expectedStatus" className="label">
                         Expected Status Code
                       </label>
                       <select
@@ -239,7 +239,7 @@ const CreateMonitor = () => {
                         name="expectedStatus"
                         value={formData.expectedStatus}
                         onChange={handleChange}
-                        className="input-dark w-full"
+                        className="input w-full"
                       >
                         <option value="200">200 (OK)</option>
                         <option value="201">201 (Created)</option>
@@ -253,7 +253,7 @@ const CreateMonitor = () => {
 
                 {/* Alert Settings */}
                 <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-4">Alert Settings</h3>
+                  <h3 className="text-lg font-semibold text-[color:var(--text-primary)] mb-4">Alert Settings</h3>
 
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
@@ -261,9 +261,9 @@ const CreateMonitor = () => {
                         type="checkbox"
                         id="emailAlerts"
                         defaultChecked
-                        className="rounded border-border-color bg-bg-secondary text-accent-green focus:ring-accent-green"
+                        className="rounded border-[color:var(--border-color)] bg-[color:var(--bg-secondary)] text-[color:var(--accent-green)] focus:ring-[color:var(--accent-green)]"
                       />
-                      <label htmlFor="emailAlerts" className="text-sm text-text-primary">
+                      <label htmlFor="emailAlerts" className="text-sm text-[color:var(--text-primary)]">
                         Send email alerts when monitor goes down
                       </label>
                     </div>
@@ -273,9 +273,9 @@ const CreateMonitor = () => {
                         type="checkbox"
                         id="recoveryAlerts"
                         defaultChecked
-                        className="rounded border-border-color bg-bg-secondary text-accent-green focus:ring-accent-green"
+                        className="rounded border-[color:var(--border-color)] bg-[color:var(--bg-secondary)] text-[color:var(--accent-green)] focus:ring-[color:var(--accent-green)]"
                       />
-                      <label htmlFor="recoveryAlerts" className="text-sm text-text-primary">
+                      <label htmlFor="recoveryAlerts" className="text-sm text-[color:var(--text-primary)]">
                         Send email alerts when monitor recovers
                       </label>
                     </div>
@@ -283,7 +283,7 @@ const CreateMonitor = () => {
                 </div>
 
                 {/* Form Actions */}
-                <div className="flex items-center justify-between pt-6 border-t border-border-color">
+                <div className="flex items-center justify-between pt-6 border-t border-[color:var(--border-color)]">
                   <button
                     type="button"
                     onClick={() => navigate('/dashboard')}
