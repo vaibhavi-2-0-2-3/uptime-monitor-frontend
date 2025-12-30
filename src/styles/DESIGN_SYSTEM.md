@@ -3,6 +3,7 @@
 ## Color Palette
 
 ### Primary Colors (CSS Variables)
+
 ```
 --bg-primary:      #0a0a0a  (Main background)
 --bg-secondary:    #111111  (Cards, secondary elements)
@@ -28,6 +29,7 @@
 ## Component Classes
 
 ### Buttons
+
 - `.btn-primary` - Primary action button (green background)
 - `.btn-secondary` - Secondary action button (outline style)
 - `.btn-outline` - Outline button
@@ -36,6 +38,7 @@
 - `.btn-small-secondary` - Small secondary button
 
 ### Cards & Containers
+
 - `.card` - Standard card with border and shadow
 - `.card-elevated` - Card with elevated shadow
 - `.panel` - Panel container
@@ -43,6 +46,7 @@
 - `.section-card` - Section container card
 
 ### Status & Alerts
+
 - `.status-badge` - Status indicator badge
 - `.status-success` - Green success badge
 - `.status-error` - Red error badge
@@ -56,6 +60,7 @@
 - `.alert-info` - Info alert
 
 ### Badges & Labels
+
 - `.badge` - General-purpose badge
 - `.label` - Form label
 
@@ -74,6 +79,7 @@ Paragraphs use `--text-secondary` color by default.
 ## Responsive Design
 
 All components are responsive and work seamlessly on:
+
 - Mobile (< 768px)
 - Tablet (768px - 1024px)
 - Desktop (> 1024px)
