@@ -11,7 +11,7 @@ const Settings = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   // Form states
   const [profileForm, setProfileForm] = useState({
     name: '',
@@ -126,7 +126,7 @@ const Settings = () => {
       [setting]: !notificationSettings[setting]
     };
     setNotificationSettings(newSettings);
-    
+
     try {
       await axios.patch('/user/preferences', {
         notifications: newSettings
@@ -160,7 +160,7 @@ const Settings = () => {
       showToast('Please type DELETE to confirm account deletion', 'error');
       return;
     }
-    
+
     try {
       await axios.delete('/user/delete', {
         headers: { Authorization: `Bearer ${token}` }
@@ -188,7 +188,7 @@ const Settings = () => {
   return (
     <div className="flex h-screen bg-[color:var(--bg-primary)]">
       <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-      
+
       <div className="flex-1 flex flex-col lg:ml-0">
         {/* Header */}
         <header className="bg-[color:var(--bg-secondary)] border-b border-[color:var(--border-color)] px-6 py-4">
@@ -222,7 +222,7 @@ const Settings = () => {
         {/* Main Content */}
         <main className="flex-1 overflow-auto p-6">
           <div className="max-w-4xl mx-auto space-y-6">
-            
+
             {/* Profile Section */}
             <div className="card p-6">
               <h2 className="text-xl font-bold text-[color:var(--text-primary)] mb-4">Profile</h2>
@@ -235,7 +235,7 @@ const Settings = () => {
                   <p className="text-[color:var(--text-secondary)]">{user?.email}</p>
                 </div>
               </div>
-              
+
               <form onSubmit={handleProfileUpdate} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="label">
@@ -245,7 +245,7 @@ const Settings = () => {
                     type="text"
                     id="name"
                     value={profileForm.name}
-                    onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
+                    onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
                     className="input w-full"
                     required
                   />
@@ -258,7 +258,7 @@ const Settings = () => {
                     type="email"
                     id="email"
                     value={profileForm.email}
-                    onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
+                    onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                     className="input w-full"
                     required
                   />
@@ -285,7 +285,7 @@ const Settings = () => {
                     type="password"
                     id="currentPassword"
                     value={passwordForm.currentPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
                     className="input w-full"
                     required
                   />
@@ -298,7 +298,7 @@ const Settings = () => {
                     type="password"
                     id="newPassword"
                     value={passwordForm.newPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                     className="input w-full"
                     required
                     minLength={6}
@@ -312,7 +312,7 @@ const Settings = () => {
                     type="password"
                     id="confirmPassword"
                     value={passwordForm.confirmPassword}
-                    onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
                     className="input w-full"
                     required
                   />
@@ -338,16 +338,14 @@ const Settings = () => {
                   </div>
                   <button
                     onClick={() => handleNotificationToggle('emailAlerts')}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      notificationSettings.emailAlerts ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
-                    }`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notificationSettings.emailAlerts ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
+                      }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      notificationSettings.emailAlerts ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notificationSettings.emailAlerts ? 'translate-x-6' : 'translate-x-1'
+                      }`} />
                   </button>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-[color:var(--text-primary)] font-medium">SMS Alerts</h3>
@@ -361,7 +359,7 @@ const Settings = () => {
                     <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-1" />
                   </button>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-[color:var(--text-primary)] font-medium">Telegram Alerts</h3>
@@ -388,13 +386,11 @@ const Settings = () => {
                 </div>
                 <button
                   onClick={handleThemeToggle}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    theme === 'dark' ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
-                  }`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${theme === 'dark' ? 'bg-[color:var(--accent-green)]' : 'bg-[color:var(--bg-tertiary)]'
+                    }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
-                  }`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
+                    }`} />
                 </button>
               </div>
             </div>

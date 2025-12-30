@@ -17,16 +17,16 @@
     --bg-primary: #0a0a0a;
     --bg-secondary: #111111;
     --bg-tertiary: #1a1a1a;
-    
+
     /* Text Colors */
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
     --text-muted: #666666;
-    
+
     /* Border Colors */
     --border-color: #333333;
     --border-light: #4a4a4a;
-    
+
     /* Accent Colors */
     --accent-green: #10b981;
     --accent-green-hover: #059669;
@@ -34,13 +34,13 @@
     --accent-red: #ef4444;
     --accent-yellow: #f59e0b;
     --accent-blue: #3b82f6;
-    
+
     /* Status Colors */
     --status-success: #10b981;
     --status-warning: #f59e0b;
     --status-error: #ef4444;
     --status-info: #3b82f6;
-    
+
     /* Component specific */
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -56,14 +56,14 @@
     --bg-primary: #ffffff;
     --bg-secondary: #f8fafc;
     --bg-tertiary: #f1f5f9;
-    
+
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #94a3b8;
-    
+
     --border-color: #e2e8f0;
     --border-light: #cbd5e1;
-    
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -89,7 +89,12 @@
       sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold text-[color:var(--text-primary)];
   }
 
@@ -101,7 +106,9 @@
     @apply text-[color:var(--accent-green)] hover:text-[color:var(--accent-green-hover)] transition-colors;
   }
 
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     @apply bg-[color:var(--bg-secondary)] border border-[color:var(--border-color)] text-[color:var(--text-primary)] rounded-lg px-4 py-2 placeholder-[color:var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-green)] focus:border-transparent transition;
   }
 }

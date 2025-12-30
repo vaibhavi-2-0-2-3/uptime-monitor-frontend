@@ -87,8 +87,8 @@ const Sidebar = ({ isOpen, onToggle }) => {
                 to={item.path}
                 className={`
                   flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all
-                  ${item.active 
-                    ? 'bg-[color:var(--accent-green-light)] text-[color:var(--bg-primary)]' 
+                  ${item.active
+                    ? 'bg-[color:var(--accent-green-light)] text-[color:var(--bg-primary)]'
                     : 'text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-tertiary)]'
                   }
                   ${collapsed ? 'justify-center' : ''}
